@@ -1,280 +1,243 @@
-<!-- Don't delete it -->
-<div name="readme-top"></div>
+# Web Intelligence
 
-<!-- Organization Logo -->
-<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-  <img alt="AOSSIE" src="public/aossie-logo.svg" width="175">
-  <img src="public/todo-project-logo.svg" width="175" />
-</div>
+**Fetch the internet, serve it to any AI.**
 
-&nbsp;
-
-<!-- Organization Name -->
-<div align="center">
-
-[![Static Badge](https://img.shields.io/badge/aossie.org/TODO-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie.org/)
-
-<!-- Correct deployed url to be added -->
-
-</div>
-
-<!-- Organization/Project Social Handles -->
-<p align="center">
-<!-- Telegram -->
-<a href="https://t.me/StabilityNexus">
-<img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/></a>
-&nbsp;&nbsp;
-<!-- X (formerly Twitter) -->
-<a href="https://x.com/aossie_org">
-<img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/></a>
-&nbsp;&nbsp;
-<!-- Discord -->
-<a href="https://discord.gg/hjUhu33uAn">
-<img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/></a>
-&nbsp;&nbsp;
-<!-- Medium -->
-<a href="https://news.stability.nexus/">
-  <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
-&nbsp;&nbsp;
-<!-- LinkedIn -->
-<a href="https://www.linkedin.com/company/aossie/">
-  <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
-&nbsp;&nbsp;
-<!-- Youtube -->
-<a href="https://www.youtube.com/@AOSSIE-Org">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCKVVLbawY7Gej_3o2WKsoiA?style=flat&logo=youtube&logoColor=white%20&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
-</p>
+Web Intelligence is a Python library that crawls websites (or searches the web for you), extracts the useful text, and turns it into clean, formatted context that any LLM can read — OpenAI, Ollama, Groq, Anthropic, LangChain, or your own code. No API key needed for the core library.
 
 ---
 
-<div align="center">
-<h1>TODO: Project Name</h1>
-</div>
+## What does it do?
 
-[TODO](https://TODO.stability.nexus/) is a ... TODO: Project Description.
-
----
-
-## 🚀 Features
-
-TODO: List your main features here:
-
-- **Feature 1**: Description
-- **Feature 2**: Description
-- **Feature 3**: Description
-- **Feature 4**: Description
+1. **You give it a URL** → it crawls the page, extracts clean text, splits it into chunks, embeds them, and stores them in a vector database.
+2. **You ask a question** → it finds the most relevant chunks and gives you LLM-ready context.
+3. **Or you give it just a question (no URL)** → it searches the web via DuckDuckGo, crawls the top results, indexes them, and gives you the answer context. One line of code.
 
 ---
 
-## 💻 Tech Stack
-
-TODO: Update based on your project
-
-### Frontend
-- React / Next.js / Flutter / React Native
-- TypeScript
-- TailwindCSS
-
-### Backend
-- Flask / FastAPI / Node.js / Supabase
-- Database: PostgreSQL / SQLite / MongoDB
-
-### AI/ML (if applicable)
-- LangChain / LangGraph / LlamaIndex
-- Google Gemini / OpenAI / Anthropic Claude
-- Vector Database: Weaviate / Pinecone / Chroma
-- RAG / Prompt Engineering / Agent Frameworks
-
-### Blockchain (if applicable)
-- Solidity / solana / cardano / ergo Smart Contracts
-- Hardhat / Truffle / foundry
-- Web3.js / Ethers.js / Wagmi
-- OpenZeppelin / alchemy / Infura
-
----
-
-## ✅ Project Checklist
-
-TODO: Complete applicable items based on your project type
-
-- [ ] **The protocol** (if applicable):
-   - [ ] has been described and formally specified in a paper.
-   - [ ] has had its main properties mathematically proven.
-   - [ ] has been formally verified.
-- [ ] **The smart contracts** (if applicable):
-   - [ ] were thoroughly reviewed by at least two knights of The Stable Order.
-   - [ ] were deployed to: [Add deployment details]
-- [ ] **The mobile app** (if applicable):
-   - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is available for download as a release in this repo.
-   - [ ] is available in the relevant app stores.
-- [ ] **The AI/ML components** (if applicable):
-   - [ ] LLM/model selection and configuration are documented.
-   - [ ] Prompts and system instructions are version-controlled.
-   - [ ] Content safety and moderation mechanisms are implemented.
-   - [ ] API keys and rate limits are properly managed.
-
----
-
-## 🔗 Repository Links
-
-TODO: Update with your repository structure
-
-1. [Main Repository](https://github.com/AOSSIE-Org/TODO)
-2. [Frontend](https://github.com/AOSSIE-Org/TODO/tree/main/frontend) (if separate)
-3. [Backend](https://github.com/AOSSIE-Org/TODO/tree/main/backend) (if separate)
-
----
-
-## 🏗️ Architecture Diagram
-
-TODO: Add your system architecture diagram here
-
-```
-[Architecture Diagram Placeholder]
-```
-
-You can create architecture diagrams using:
-- [Draw.io](https://draw.io)
-- [Excalidraw](https://excalidraw.com)
-- [Lucidchart](https://lucidchart.com)
-- [Mermaid](https://mermaid.js.org) (for code-based diagrams)
-
-Example structure to include:
-- Frontend components
-- Backend services
-- Database architecture
-- External APIs/services
-- Data flow between components
-
----
-
-## 🔄 User Flow
-
-TODO: Add user flow diagrams showing how users interact with your application
-
-```
-[User Flow Diagram Placeholder]
-```
-
-### Key User Journeys
-
-TODO: Document main user flows:
-
-1. **User Journey 1**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-2. **User Journey 2**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-3. **User Journey 3**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
----
-
-## �🍀 Getting Started
-
-### Prerequisites
-
-TODO: List what developers need installed
-
-- Node.js 18+ / Python 3.9+ / Flutter SDK
-- npm / yarn / pnpm
-- [Any specific tools or accounts needed]
-
-### Installation
-
-TODO: Provide detailed setup instructions
-
-#### 1. Clone the Repository
+## Install
 
 ```bash
-git clone https://github.com/AOSSIE-Org/TODO.git
-cd TODO
+pip install web-intelligence
 ```
 
-#### 2. Install Dependencies
+The core library is lightweight (~50 MB). Pick optional extras based on what you need:
 
 ```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
+# Lightweight embeddings (recommended to start)
+pip install web-intelligence[fastembed]
+
+# GPU-accelerated embeddings (heavier, ~2 GB)
+pip install web-intelligence[gpu]
+
+# Web search (DuckDuckGo, no API key)
+pip install web-intelligence[search]
+
+# ChromaDB vector store (production-grade persistence)
+pip install web-intelligence[chromadb]
+
+# REST API server
+pip install web-intelligence[server]
+
+# Everything at once
+pip install web-intelligence[all]
 ```
 
-#### 3. Configure Environment Variables(.env.example)
+---
 
-Create a `.env` file in the root directory:
+## Quick Start
+
+### Index a website and ask questions
+
+```python
+from web_intelligence import FastPipeline
+
+pipeline = FastPipeline()
+
+# Crawl and index a page
+pipeline.index_url("https://en.wikipedia.org/wiki/Python_(programming_language)")
+
+# Ask a question — get formatted context for any LLM
+ctx = pipeline.retrieve("what is python used for?")
+print(ctx.context_text)     # clean text, ready for any LLM
+print(ctx.sources)          # source URLs
+messages = ctx.as_messages() # OpenAI-compatible message format
+```
+
+### Search the web (no URL needed)
+
+```python
+from web_intelligence import FastPipeline
+
+pipeline = FastPipeline()
+
+# One line: searches DuckDuckGo → crawls top results → indexes → retrieves
+ctx = pipeline.search_web("latest features in Python 3.12")
+print(ctx.context_text)
+```
+
+### Use with any LLM (Groq + LangChain example)
+
+```python
+from web_intelligence import FastPipeline
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+pipeline = FastPipeline()
+ctx = pipeline.search_web("what is FastAPI framework")
+
+llm = ChatGroq(model="llama-3.3-70b-versatile")
+response = llm.invoke(ctx.as_messages())
+print(response.content)
+```
+
+### Index multiple pages at once
+
+```python
+urls = [
+    "https://docs.python.org/3/tutorial/index.html",
+    "https://fastapi.tiangolo.com/",
+    "https://docs.pydantic.dev/latest/",
+]
+results = pipeline.index_batch(urls)
+```
+
+---
+
+## How It Works (Step by Step)
+
+### When you give it a URL (`index_url`):
+1. **Crawl** — Fetches the page using HTTP/2 (with retry, rate limiting, robots.txt).
+2. **Extract** — Strips HTML, ads, navbars. Keeps only the useful article text.
+3. **Chunk** — Splits the text into overlapping pieces (~400 words each).
+4. **Embed** — Converts each chunk into a vector (a list of numbers) that captures its meaning.
+5. **Store** — Saves the vectors in a vector database for fast search.
+
+### When you ask a question (`retrieve`):
+1. **Embed the question** — Converts your question into a vector.
+2. **Search** — Finds the stored chunks most similar to your question.
+3. **Format** — Packages the top results into clean, formatted text with source URLs.
+4. **Return** — Gives you a `RetrievedContext` object with `.context_text`, `.sources`, and `.as_messages()`.
+
+### When you search the web (`search_web`):
+1. **Search DuckDuckGo** — Finds the top web pages for your question.
+2. **Crawl** those pages.
+3. **Extract + Chunk + Embed + Store** (same as above).
+4. **Retrieve** — Searches the freshly indexed content and returns context.
+
+All in one line of code.
+
+---
+
+## Configuration
+
+```python
+from web_intelligence import FastPipeline, Config
+
+config = Config()
+config.chunker.chunk_size = 500           # words per chunk
+config.chunker.chunk_overlap = 75         # overlap between chunks
+config.embedding.model_name = "all-mpnet-base-v2"  # better accuracy
+config.crawler.max_retries = 5            # more retries
+
+pipeline = FastPipeline(config=config)
+```
+
+Or use environment variables (in `.env` file):
 
 ```env
-# Add your environment variables here
-API_KEY=your_api_key
-DATABASE_URL=your_database_url
+WI_CHUNK_SIZE=500
+WI_EMBEDDING_MODEL=all-mpnet-base-v2
+WI_CRAWLER_MAX_RETRIES=5
+WI_SERVER_PORT=9000
 ```
 
-#### 4. Run the Development Server
+---
+
+## Pluggable Components
+
+Swap out any component:
+
+```python
+from web_intelligence import FastPipeline
+from web_intelligence.embedders import FastEmbedEmbedder
+from web_intelligence.vector_stores import NumpyVectorStore
+
+pipeline = FastPipeline(
+    embedder=FastEmbedEmbedder(),             # lightweight, no GPU
+    vector_store=NumpyVectorStore(),          # no ChromaDB needed
+)
+```
+
+Available embedders: `SentenceTransformerEmbedder`, `FastEmbedEmbedder`, `OpenAIEmbedder`, `OllamaEmbedder`
+
+Available vector stores: `ChromaVectorStore`, `NumpyVectorStore`
+
+Available search providers: `DuckDuckGoSearchProvider`
+
+---
+
+## REST API
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+python main.py serve
 ```
 
-#### 5. Open your Browser
-
-Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
-
-For detailed setup instructions, please refer to our [Installation Guide](./docs/INSTALL_GUIDE.md) (if you have one).
-
----
-
-## 📱 App Screenshots
-
-TODO: Add screenshots showcasing your application
-
-|  |  |  |
-|---|---|---|
-| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+Endpoints:
+- `POST /index` — Index a URL
+- `POST /index/batch` — Index multiple URLs
+- `POST /retrieve` — Get LLM-ready context
+- `POST /search-web` — Web search → context
+- `GET /documents` — List indexed documents
+- `GET /stats` — Pipeline statistics
+- `GET /health` — Health check
 
 ---
 
-## 🙌 Contributing
+## CLI
 
-⭐ Don't forget to star this repository if you find it useful! ⭐
-
-Thank you for considering contributing to this project! Contributions are highly appreciated and welcomed. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
-
----
-
-## ✨ Maintainers
-
-TODO: Add maintainer information
-
-- [Maintainer Name](https://github.com/username)
-- [Maintainer Name](https://github.com/username)
+```bash
+python main.py index https://example.com
+python main.py search "what is python"
+python main.py retrieve "explain decorators"
+python main.py documents
+python main.py stats
+python main.py serve
+```
 
 ---
 
-## 📍 License
+## Project Structure
 
-This project is licensed under the GNU General Public License v3.0.
-See the [LICENSE](LICENSE) file for details.
+```
+web_intelligence/
+├── __init__.py              # Public API exports
+├── optimized_pipeline.py    # Core pipeline (crawl → embed → store → retrieve)
+├── config.py                # Configuration with env var support
+├── async_crawler.py         # HTTP/2 crawler with retry + rate limiting
+├── crawler.py               # Crawl result data class
+├── extractor.py             # HTML → clean text extraction
+├── chunker.py               # Text splitting into overlapping chunks
+├── context_formatter.py     # Formats search results for LLMs
+├── cache.py                 # URL + content + embedding caches
+├── server.py                # FastAPI REST server
+├── exceptions.py            # Custom exception types
+├── _logging.py              # Logging setup
+├── embedders/               # Pluggable embedding backends
+│   ├── sentence_transformer.py
+│   ├── fastembed_embedder.py
+│   ├── openai_embedder.py
+│   └── ollama_embedder.py
+├── vector_stores/           # Pluggable vector store backends
+│   ├── chroma_store.py
+│   └── numpy_store.py
+└── search_providers/        # Pluggable web search backends
+    └── duckduckgo_provider.py
+```
 
 ---
 
-## 💪 Thanks To All Contributors
+## License
 
-Thanks a lot for spending your time helping TODO grow. Keep rocking 🥂
-
-[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/TODO)](https://github.com/AOSSIE-Org/TODO/graphs/contributors)
-
-© 2025 AOSSIE 
+MIT
