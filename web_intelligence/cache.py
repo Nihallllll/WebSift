@@ -3,7 +3,7 @@ import json
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 class URLCache:
@@ -34,8 +34,10 @@ class URLCache:
         
         if ttl_hours is not None:
             cached_at = datetime.fromisoformat(self.index[url_hash]['cached_at'])
+            if cached_at.tzinfo is None:
+                cached_at = cached_at.replace(tzinfo=timezone.utc)
             expiry = cached_at + timedelta(hours=ttl_hours)
-            if datetime.now() > expiry:
+            if datetime.now(timezone.utc) > expiry:
                   return False
         
         return True
@@ -49,7 +51,7 @@ class URLCache:
         
         self.index[url_hash] = {
             'url': url,
-            'cached_at': datetime.now().isoformat(),
+            'cached_at': datetime.now(timezone.utc).isoformat(),
             'data': data
         }
         
@@ -66,10 +68,14 @@ class URLCache:
         self._save_index()
     
     def stats(self) -> Dict[str, Any]:
+        try:
+            index_size = self.index_file.stat().st_size
+        except (OSError, FileNotFoundError):
+            index_size = 0
         return {
             'total_cached': len(self.index),
             'cache_dir': str(self.cache_dir),
-            'index_size_bytes': self.index_file.stat().st_size if self.index_file.exists() else 0
+            'index_size_bytes': index_size
         }
 
 
@@ -102,7 +108,7 @@ class ContentCache:
         self.hashes[content_hash] = {
             'doc_id': doc_id,
             'url': url,
-            'indexed_at': datetime.now().isoformat()
+            'indexed_at': datetime.now(timezone.utc).isoformat()
         }
         self._save_hashes()
     
@@ -132,7 +138,7 @@ class EmbeddingCache:
         if text_hash in self.cache:
             return self.cache[text_hash]
         
-        cache_file = self.cache_dir / f"{text_hash[:16]}.json"
+        cache_file = self.cache_dir / f"{text_hash}.json"
         if cache_file.exists():
             with open(cache_file, 'r') as f:
                 embedding = json.load(f)
@@ -148,7 +154,7 @@ class EmbeddingCache:
         if len(self.cache) < self.max_memory_items:
             self.cache[text_hash] = embedding
         
-        cache_file = self.cache_dir / f"{text_hash[:16]}.json"
+        cache_file = self.cache_dir / f"{text_hash}.json"
         with open(cache_file, 'w') as f:
             json.dump(embedding, f)
     

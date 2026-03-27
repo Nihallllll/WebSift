@@ -46,17 +46,37 @@ class VectorStore:
 
         results = self.collection.query(**kwargs)
 
+        metric = "l2"
+        metadata = getattr(self.collection, "metadata", None)
+        if isinstance(metadata, dict):
+            metric = str(metadata.get("hnsw:space", "l2")).lower()
+
         formatted = []
         for i in range(len(results["ids"][0])):
-            score = 1 - results["distances"][0][i]
+            distance = float(results["distances"][0][i])
+            if metric == "cosine":
+                score = 1.0 - distance
+            elif metric == "ip":
+                score = -distance
+            else:
+                score = 1.0 / (1.0 + distance)
             if score < min_score:
                 continue
+
+            meta = results["metadatas"][0][i]
+            text = ""
+            docs = results.get("documents")
+            if docs and docs[0]:
+                text = docs[0][i] or ""
+            if not text:
+                text = meta.get("text", "")
+
             formatted.append({
                 "id": results["ids"][0][i],
-                "text": results["metadatas"][0][i].get("text", ""),
-                "source": results["metadatas"][0][i].get("url", ""),
+                "text": text,
+                "source": meta.get("url", ""),
                 "score": score,
-                "metadata": results["metadatas"][0][i],
+                "metadata": meta,
             })
 
         return formatted
@@ -89,10 +109,17 @@ class VectorStore:
             return None
 
         chunks = []
+        docs = results.get("documents")
         for i, id_ in enumerate(results["ids"]):
+            text = ""
+            if docs and i < len(docs) and docs[i]:
+                text = docs[i]
+            if not text:
+                text = results["metadatas"][i].get("text", "")
+
             chunks.append({
                 "id": id_,
-                "text": results["metadatas"][i].get("text", ""),
+                "text": text,
                 "chunk_index": results["metadatas"][i].get("chunk_index", 0),
                 "word_count": results["metadatas"][i].get("word_count", 0),
             })

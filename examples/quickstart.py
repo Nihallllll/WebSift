@@ -31,7 +31,7 @@ def main():
         print(f"  - {s['title']}: {s['url']}")
     print(f"Context chunks: {ctx.total_chunks}")
     print(f"Context words:  {ctx.total_words}")
-    print(f"\nContext preview (first 500 chars):")
+    print("\nContext preview (first 500 chars):")
     print(ctx.context_text[:500])
     print("...\n")
 

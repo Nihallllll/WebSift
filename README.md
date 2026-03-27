@@ -181,7 +181,7 @@ Available search providers: `DuckDuckGoSearchProvider`
 ## REST API
 
 ```bash
-python main.py serve
+web-intelligence serve
 ```
 
 Endpoints:
@@ -198,12 +198,12 @@ Endpoints:
 ## CLI
 
 ```bash
-python main.py index https://example.com
-python main.py search "what is python"
-python main.py retrieve "explain decorators"
-python main.py documents
-python main.py stats
-python main.py serve
+web-intelligence index https://example.com
+web-intelligence search "what is python"
+web-intelligence retrieve "explain decorators"
+web-intelligence documents
+web-intelligence stats
+web-intelligence serve
 ```
 
 ---
