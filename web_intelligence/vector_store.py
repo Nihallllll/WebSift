@@ -1,5 +1,4 @@
-import chromadb
-from typing import List, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import warnings
 
@@ -14,6 +13,13 @@ warnings.warn(
 class VectorStore:
     def __init__(self, persist_directory: str = "./data/chroma",
                  collection_name: str = "web_content"):
+        try:
+            import chromadb
+        except ImportError as exc:
+            raise ImportError(
+                "ChromaDB backend requires 'chromadb'. Install with:  pip install chromadb"
+            ) from exc
+
         self.persist_directory = persist_directory
         self.collection_name = collection_name
         self.client = chromadb.PersistentClient(path=persist_directory)
@@ -32,10 +38,13 @@ class VectorStore:
 
     def search(self, query_vector: List[float], limit: int = 5,
                where_filter: Optional[Dict] = None,
-               filter: Optional[Dict] = None,
-               min_score: float = 0.0) -> List[Dict]:
-        if where_filter is None and filter is not None:
-            where_filter = filter
+               min_score: float = 0.0,
+               **legacy_kwargs: Any) -> List[Dict]:
+        if where_filter is None and "filter" in legacy_kwargs:
+            where_filter = legacy_kwargs.pop("filter")
+        if legacy_kwargs:
+            unknown = ", ".join(sorted(legacy_kwargs.keys()))
+            raise TypeError(f"Unexpected keyword argument(s): {unknown}")
 
         kwargs = {
             "query_embeddings": [query_vector],

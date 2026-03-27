@@ -133,7 +133,7 @@ class FastPipeline:
 
     def index_url(self, url: str, skip_cache: bool = False) -> Dict:
         if self.url_cache and not skip_cache:
-            if self.url_cache.is_cached(url):
+            if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
                 cached_data = self.url_cache.get(url)
                 doc_id = cached_data.get("data", {}).get("doc_id", "")
                 if doc_id and self.vector_store.get_document(doc_id) is not None:
@@ -164,7 +164,7 @@ class FastPipeline:
 
     async def index_url_async(self, url: str, skip_cache: bool = False) -> Dict:
         if self.url_cache and not skip_cache:
-            if self.url_cache.is_cached(url):
+            if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
                 cached_data = self.url_cache.get(url)
                 doc_id = cached_data.get("data", {}).get("doc_id", "")
                 if doc_id and self.vector_store.get_document(doc_id) is not None:
@@ -325,7 +325,7 @@ class FastPipeline:
 
         if self.url_cache and skip_cached:
             for url in urls:
-                if self.url_cache.is_cached(url):
+                if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
                     cached_data = self.url_cache.get(url)
                     doc_id = cached_data.get("data", {}).get("doc_id", "")
                     if doc_id and self.vector_store.get_document(doc_id) is not None:
@@ -392,7 +392,7 @@ class FastPipeline:
 
         if self.url_cache and skip_cached:
             for url in urls:
-                if self.url_cache.is_cached(url):
+                if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
                     cached_data = self.url_cache.get(url)
                     doc_id = cached_data.get("data", {}).get("doc_id", "")
                     if doc_id and self.vector_store.get_document(doc_id) is not None:

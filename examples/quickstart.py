@@ -1,10 +1,15 @@
 import os
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
 
-load_dotenv()
+if load_dotenv is not None:
+    load_dotenv()
 
 from web_intelligence import FastPipeline
+from web_intelligence.exceptions import SearchProviderError
 
 try:
     from langchain_groq import ChatGroq
@@ -21,7 +26,11 @@ def main():
     print(f"\nSearching the web for: '{question}'")
     print("(This searches DuckDuckGo → crawls pages → indexes → retrieves)\n")
 
-    ctx = pipeline.search_web(question, max_results=3, limit=5)
+    try:
+        ctx = pipeline.search_web(question, max_results=3, limit=5)
+    except SearchProviderError:
+        print("Search provider unavailable. Install optional dependency: pip install web-intelligence[search]")
+        return
 
     print("=" * 60)
     print("WEB INTELLIGENCE RESULTS")

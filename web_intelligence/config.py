@@ -87,6 +87,7 @@ class Config:
     search: SearchConfig = field(default_factory=SearchConfig)
     server: ServerConfig = field(default_factory=ServerConfig)
     cache_enabled: bool = _env("WI_CACHE_ENABLED", True, bool)
+    url_cache_ttl_hours: Optional[int] = _env("WI_URL_CACHE_TTL_HOURS", None, int)
 
     def to_dict(self) -> Dict[str, Any]:
         from dataclasses import asdict

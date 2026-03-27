@@ -221,8 +221,8 @@ def start_server(
     config = default_config().server
     uvicorn.run(
         "web_intelligence.server:app",
-        host=host or config.host,
-        port=port or config.port,
+        host=host if host is not None else config.host,
+        port=port if port is not None else config.port,
         reload=reload if reload is not None else config.reload,
     )
 

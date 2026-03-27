@@ -1,6 +1,5 @@
 import hashlib
 import json
-import os
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta, timezone
@@ -24,7 +23,7 @@ class URLCache:
             json.dump(self.index, f, indent=2)
     
     def _url_hash(self, url: str) -> str:
-        return hashlib.sha256(url.encode()).hexdigest()[:16]
+        return hashlib.sha256(url.encode()).hexdigest()
     
     def is_cached(self, url: str, ttl_hours: Optional[int] = None) -> bool:
         url_hash = self._url_hash(url)
@@ -165,7 +164,7 @@ class EmbeddingCache:
         return results
     
     def set_batch(self, texts: List[str], embeddings: List[List[float]]):
-        for text, embedding in zip(texts, embeddings):
+        for text, embedding in zip(texts, embeddings, strict=True):
             self.set(text, embedding)
     
     def clear(self):

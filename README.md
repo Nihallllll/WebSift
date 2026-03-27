@@ -77,6 +77,8 @@ print(ctx.context_text)
 
 ### Use with any LLM (Groq + LangChain example)
 
+Install the extra dependency first: `pip install langchain-groq`
+
 ```python
 from web_intelligence import FastPipeline
 from langchain_groq import ChatGroq

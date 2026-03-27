@@ -198,12 +198,12 @@ _minted*
 # nomencl
 *.nlg
 *.nlo
+*.nls
 
 # Runtime artifacts
 data/cache/
 __pycache__/
 *.pyc
-*.nls
 
 # pax
 *.pax
