@@ -210,7 +210,7 @@ python main.py serve
 
 ## Project Structure
 
-```
+```text
 web_intelligence/
 ├── __init__.py              # Public API exports
 ├── optimized_pipeline.py    # Core pipeline (crawl → embed → store → retrieve)

@@ -11,13 +11,13 @@ def auto_detect_embedder(**kwargs) -> BaseEmbedder:
         from sentence_transformers import SentenceTransformer  # noqa: F401
         import torch  # noqa: F401
         return SentenceTransformerEmbedder(**kwargs)
-    except ImportError:
+    except (ImportError, TypeError):
         pass
 
     try:
         import fastembed  # noqa: F401
         return FastEmbedEmbedder(**kwargs)
-    except ImportError:
+    except (ImportError, TypeError):
         pass
 
     from ..exceptions import NoEmbedderError

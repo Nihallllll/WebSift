@@ -81,6 +81,10 @@ async def crawl_url_async(
                 )
 
             if response.status_code == 429 or response.status_code >= 500:
+                last_error = f"HTTP {response.status_code}"
+                if attempt == max_retries:
+                    break
+
                 wait = 2 ** attempt
                 retry_after = response.headers.get("Retry-After")
                 if retry_after and retry_after.isdigit():
@@ -89,14 +93,13 @@ async def crawl_url_async(
                     "HTTP %d for %s — retrying in %ds (attempt %d/%d)",
                     response.status_code, url, wait, attempt + 1, max_retries + 1,
                 )
-                last_error = f"HTTP {response.status_code}"
                 await asyncio.sleep(wait)
                 continue
 
             return CrawlObject(
                 url=url,
                 html=response.text,
-                success=response.status_code == 200,
+                success=200 <= response.status_code < 300,
                 status_code=response.status_code,
                 crawled_at=datetime.now(),
             )

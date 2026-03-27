@@ -166,7 +166,12 @@ class TestExtractor:
 class TestEmbedder:
     def test_auto_detect(self):
         from web_intelligence.embedders import auto_detect_embedder
-        embedder = auto_detect_embedder()
+        from web_intelligence.exceptions import NoEmbedderError
+
+        try:
+            embedder = auto_detect_embedder()
+        except NoEmbedderError:
+            pytest.skip("No embedder backend installed")
         assert embedder.dimension > 0
         assert len(embedder.model_name) > 0
 
@@ -387,6 +392,10 @@ class TestExceptions:
 # ─────────────────────────────────────────────────────────
 
 @pytest.mark.network
+@pytest.mark.skipif(
+    os.getenv("RUN_NETWORK_TESTS") is None,
+    reason="Set RUN_NETWORK_TESTS=1 to run",
+)
 class TestPipelineIntegration:
     """These tests hit the network. Run with: pytest -m network"""
 

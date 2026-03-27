@@ -10,10 +10,10 @@ class CrawlObject:
     status_code : int
     success :bool
     error : Optional[str] = None
-    crawled_at : datetime =None
+    crawled_at : Optional[datetime] = None
 
 
-def crawl_url(url : str , timeout=10):
+def crawl_url(url: str, timeout: int = 10) -> CrawlObject:
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -28,11 +28,11 @@ def crawl_url(url : str , timeout=10):
         return CrawlObject(
         url=url,
         html=response.text,
-        success=response.status_code == 200,
+        success=200 <= response.status_code < 300,
         status_code=response.status_code,
         crawled_at=datetime.now()
     )
-    except Exception as e:
+    except (httpx.RequestError, httpx.TimeoutException) as e:
         return CrawlObject(
         url=url,
         html="",

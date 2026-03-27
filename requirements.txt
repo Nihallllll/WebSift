@@ -1,8 +1,8 @@
 # Core (always required)
-httpx[http2]
-beautifulsoup4
-trafilatura
-numpy
+httpx[http2]>=0.25.0
+beautifulsoup4>=4.12.0
+trafilatura>=1.6.0
+numpy>=1.24.0
 
 # Embeddings — pick ONE:
 # sentence-transformers   # GPU-accelerated (~2 GB)
@@ -13,7 +13,7 @@ numpy
 # chromadb
 
 # Web search (optional — enables pipeline.search_web())
-# duckduckgo-search
+# ddgs>=6.0.0
 
 # REST API server (optional — enables web_intelligence.server)
 # fastapi

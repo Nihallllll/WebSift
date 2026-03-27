@@ -1,3 +1,4 @@
+import html
 from typing import List, Dict, Optional
 from dataclasses import dataclass, field
 
@@ -39,7 +40,7 @@ class RetrievedContext:
 
         question = user_question or self.query
         source_list = "\n".join(
-            f"  - [{s['title']}]({s['url']})" for s in self.sources
+            f"  - [{s.get('title', 'Untitled')}]({s.get('url', '')})" for s in self.sources
         )
         user_content = (
             f"Context:\n{self.context_text}\n\n"
@@ -152,12 +153,15 @@ def format_context_structured(chunks: List[Dict], query: str,
         if word_count + len(words) > max_words:
             break
 
+        esc_url = html.escape(url, quote=True)
+        esc_title = html.escape(title, quote=True)
+        esc_text = html.escape(text, quote=True)
         block = (
             f"<document index=\"{i}\">\n"
-            f"  <source>{url}</source>\n"
-            f"  <title>{title}</title>\n"
+            f"  <source>{esc_url}</source>\n"
+            f"  <title>{esc_title}</title>\n"
             f"  <relevance>{score:.2f}</relevance>\n"
-            f"  <content>{text}</content>\n"
+            f"  <content>{esc_text}</content>\n"
             f"</document>"
         )
         parts.append(block)

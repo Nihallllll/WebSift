@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Callable, Dict, List, Literal, Optional
 
 from .async_crawler import crawl_urls_batch
@@ -276,7 +276,7 @@ class FastPipeline:
                     "url": c.url,
                     "doc_id": doc_id,
                     "word_count": c.word_count,
-                    "indexed_at": datetime.now().isoformat(),
+                    "indexed_at": datetime.now(timezone.utc).isoformat(),
                 }
                 for c in chunks
             ]
@@ -486,14 +486,14 @@ class FastPipeline:
             from .search_providers import DuckDuckGoSearchProvider
             self.search_provider = DuckDuckGoSearchProvider()
             return self.search_provider
-        except ImportError:
+        except ImportError as err:
             from .exceptions import SearchProviderError
             raise SearchProviderError(
                 "none",
                 "No search provider available. Install one:\n"
                 "  pip install duckduckgo-search\n"
                 "  pip install web-intelligence[search]"
-            )
+            ) from err
 
     def search(
         self,
@@ -539,10 +539,17 @@ class FastPipeline:
         where_filter: Optional[Dict] = None,
         min_score: float = 0.0,
     ) -> RetrievedContext:
-        return self.retrieve(
-            query, limit=limit, output_format=output_format,
-            max_context_words=max_context_words,
-            where_filter=where_filter, min_score=min_score,
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(
+            None,
+            lambda: self.retrieve(
+                query,
+                limit=limit,
+                output_format=output_format,
+                max_context_words=max_context_words,
+                where_filter=where_filter,
+                min_score=min_score,
+            ),
         )
 
     def get_context_for_llm(

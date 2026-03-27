@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from typing import List, Optional, Dict
+import os
 import torch
 from .cache import EmbeddingCache
 
@@ -37,7 +38,7 @@ class FastEmbedder:
         self.cache_misses = 0
         
         if device == "cpu":
-            torch.set_num_threads(torch.get_num_threads())
+            torch.set_num_threads(os.cpu_count() or 1)
 
 
     def embed(self, text: str) -> List[float]:
@@ -104,7 +105,7 @@ class FastEmbedder:
             normalize_embeddings=True
         )
         
-        for idx, (text, vector) in enumerate(zip(texts_to_embed, vectors)):
+        for idx, (text, vector) in enumerate(zip(texts_to_embed, vectors, strict=True)):
             embedding = vector.tolist()
             results[indices_to_embed[idx]] = embedding
             

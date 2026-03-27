@@ -1,16 +1,22 @@
+import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from web_intelligence import FastPipeline
-from langchain_groq import ChatGroq
+
+try:
+    from langchain_groq import ChatGroq
+except ImportError:
+    ChatGroq = None
 
 
 def main():
     print("Setting up Web Intelligence pipeline...")
     pipeline = FastPipeline()
 
-    question = "what is lcm of 9 and 17"
+    question = "who is nostradamous ??"
 
     print(f"\nSearching the web for: '{question}'")
     print("(This searches DuckDuckGo → crawls pages → indexes → retrieves)\n")
@@ -29,28 +35,31 @@ def main():
     print(ctx.context_text[:500])
     print("...\n")
 
-    print("=" * 60)
-    print("SENDING TO GROQ LLM (llama-3.3-70b-versatile)")
-    print("=" * 60)
+    if ChatGroq and os.getenv("GROQ_API_KEY"):
+        print("=" * 60)
+        print("SENDING TO GROQ LLM (llama-3.3-70b-versatile)")
+        print("=" * 60)
 
-    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+        llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
 
-    messages = ctx.as_messages()
-    response = llm.invoke(messages)
+        messages = ctx.as_messages()
+        response = llm.invoke(messages)
 
-    print(f"\nLLM ANSWER:\n")
-    print(response.content)
+        print("\nLLM ANSWER:\n")
+        print(response.content)
 
-    print("\n" + "=" * 60)
-    print("BONUS: Index a specific page and ask a question")
-    print("=" * 60)
+        print("\n" + "=" * 60)
+        print("BONUS: Index a specific page and ask a question")
+        print("=" * 60)
 
-    pipeline.index_url("https://en.wikipedia.org/wiki/Python_(programming_language)")
-    ctx2 = pipeline.retrieve("Who created Python and when?")
+        pipeline.index_url("https://en.wikipedia.org/wiki/Python_(programming_language)")
+        ctx2 = pipeline.retrieve("Who created Python and when?")
 
-    response2 = llm.invoke(ctx2.as_messages())
-    print(f"\nQuestion: Who created Python and when?")
-    print(f"Answer: {response2.content}")
+        response2 = llm.invoke(ctx2.as_messages())
+        print("\nQuestion: Who created Python and when?")
+        print(f"Answer: {response2.content}")
+    else:
+        print("\nSkipping Groq demo. Install langchain-groq and set GROQ_API_KEY.")
 
 
 if __name__ == "__main__":

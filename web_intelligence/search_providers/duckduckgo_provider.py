@@ -46,9 +46,12 @@ class DuckDuckGoSearchProvider:
                     max_results=max_results,
                 )
                 for item in raw:
+                    href = item.get("href")
+                    if not href:
+                        continue
                     results.append(
                         SearchResult(
-                            url=item.get("href", ""),
+                            url=href,
                             title=item.get("title", ""),
                             snippet=item.get("body", ""),
                         )

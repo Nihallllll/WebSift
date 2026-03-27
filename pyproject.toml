@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "AOSSIE-Org"}
 ]
 keywords = [
     "web-crawling",
@@ -42,10 +42,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/web-intelligence"
-Documentation = "https://github.com/yourusername/web-intelligence#readme"
-Repository = "https://github.com/yourusername/web-intelligence"
-Issues = "https://github.com/yourusername/web-intelligence/issues"
+Homepage = "https://github.com/AOSSIE-Org/WebSift"
+Documentation = "https://github.com/AOSSIE-Org/WebSift#readme"
+Repository = "https://github.com/AOSSIE-Org/WebSift"
+Issues = "https://github.com/AOSSIE-Org/WebSift/issues"
 
 [project.optional-dependencies]
 # Lightweight ONNX embeddings (~200 MB, CPU-only)
@@ -57,7 +57,7 @@ gpu = ["sentence-transformers>=2.2.0", "torch>=2.0.0"]
 # ChromaDB vector store (persistent, production-grade)
 chromadb = ["chromadb>=0.4.0"]
 
-# Web search (DuckDuckGo, no API key needed)
+# Web search (ddgs backend, no API key needed)
 search = ["ddgs>=6.0.0"]
 
 # REST API server
@@ -90,7 +90,7 @@ dev = [
 ]
 
 [project.scripts]
-web-intelligence = "main:main"
+web-intelligence = "web_intelligence.cli:main"
 
 [build-system]
 requires = ["hatchling"]

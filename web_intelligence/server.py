@@ -156,7 +156,7 @@ def search_web(req: SearchWebRequest):
         result["messages"] = ctx.as_messages()
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/documents")
@@ -185,7 +185,15 @@ def delete_document(doc_id: str):
 
 
 @app.delete("/documents/by-url")
-def delete_by_url(req: DeleteURLRequest):
+def delete_by_url(url: str):
+    pipeline = get_pipeline()
+    count = pipeline.delete_url(url)
+    return {"deleted_chunks": count, "url": url}
+
+
+@app.post("/documents/by-url")
+def delete_by_url_body(req: DeleteURLRequest):
+    # Backward-compatible endpoint for clients that already send a JSON body.
     pipeline = get_pipeline()
     count = pipeline.delete_url(req.url)
     return {"deleted_chunks": count, "url": req.url}
@@ -204,7 +212,11 @@ def clear_all():
     return {"cleared": True}
 
 
-def start_server(host: str = None, port: int = None, reload: bool = None):
+def start_server(
+    host: Optional[str] = None,
+    port: Optional[int] = None,
+    reload: Optional[bool] = None,
+):
     import uvicorn
     config = default_config().server
     uvicorn.run(

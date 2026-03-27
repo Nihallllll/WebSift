@@ -1,4 +1,3 @@
-from typing import List
 from dataclasses import dataclass
 import re
 
@@ -11,7 +10,7 @@ class Chunk:
     url: str
 
 
-def split_into_sentences(text: str) -> List[str]:
+def split_into_sentences(text: str) -> list[str]:
     sentence_endings = r'(?<=[.!?])\s+'
     sentences = re.split(sentence_endings, text)
     return [s.strip() for s in sentences if s.strip()]
@@ -21,8 +20,8 @@ def count_words(text: str) -> int:
     return len(text.split())
 
 
-def chunk_text(text: str, document_id: str, url: str, 
-               chunk_size: int = 400, overlap: int = 50) -> List[Chunk]:
+def chunk_text(text: str, document_id: str, url: str,
+               chunk_size: int = 400, overlap: int = 50) -> list[Chunk]:
     sentences = split_into_sentences(text)
     
     if not sentences:
@@ -72,7 +71,3 @@ def chunk_text(text: str, document_id: str, url: str,
         ))
     
     return chunks
-
-
-def tokenizer(text: str) -> List[str]:
-    return text.split()

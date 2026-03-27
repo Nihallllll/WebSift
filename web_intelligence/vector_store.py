@@ -19,22 +19,30 @@ class VectorStore:
         self.client = chromadb.PersistentClient(path=persist_directory)
         self.collection = self.client.get_or_create_collection(collection_name)
 
-    def add(self, vectors: List[List[float]], metadatas: List[Dict], ids: List[str]):
-        self.collection.add(
-            embeddings=vectors,
-            metadatas=metadatas,
-            ids=ids,
-        )
+    def add(self, vectors: List[List[float]], metadatas: List[Dict], ids: List[str],
+            documents: Optional[List[str]] = None):
+        kwargs = {
+            "embeddings": vectors,
+            "metadatas": metadatas,
+            "ids": ids,
+        }
+        if documents:
+            kwargs["documents"] = documents
+        self.collection.add(**kwargs)
 
     def search(self, query_vector: List[float], limit: int = 5,
+               where_filter: Optional[Dict] = None,
                filter: Optional[Dict] = None,
                min_score: float = 0.0) -> List[Dict]:
+        if where_filter is None and filter is not None:
+            where_filter = filter
+
         kwargs = {
             "query_embeddings": [query_vector],
             "n_results": limit,
         }
-        if filter:
-            kwargs["where"] = filter
+        if where_filter:
+            kwargs["where"] = where_filter
 
         results = self.collection.query(**kwargs)
 

@@ -34,7 +34,7 @@ class FastEmbedEmbedder:
             logger.info("Mapped model name '%s' → '%s'", model_name, resolved_name)
 
         logger.info("Loading fastembed model '%s'", resolved_name)
-        self._model = TextEmbedding(model_name=resolved_name)
+        self._model = TextEmbedding(model_name=resolved_name, **kwargs)
         self.model_name: str = resolved_name
         self.dimension: int = self._get_dimension()
 
@@ -68,6 +68,9 @@ class FastEmbedEmbedder:
         batch_size: int = 32,
         show_progress: bool = False,
     ) -> List[List[float]]:
+        # fastembed does not expose a progress flag for this call.
+        _ = show_progress
+
         if not texts:
             return []
 
@@ -94,7 +97,7 @@ class FastEmbedEmbedder:
 
         vectors = list(self._model.embed(texts_to_embed, batch_size=batch_size))
 
-        for idx, (text, vector) in enumerate(zip(texts_to_embed, vectors)):
+        for idx, (text, vector) in enumerate(zip(texts_to_embed, vectors, strict=True)):
             embedding = vector.tolist()
             results[indices_to_embed[idx]] = embedding
             if self.cache:

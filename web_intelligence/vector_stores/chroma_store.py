@@ -58,9 +58,20 @@ class ChromaVectorStore:
 
         results = self.collection.query(**kwargs)
 
+        metric = "l2"
+        metadata = getattr(self.collection, "metadata", None)
+        if isinstance(metadata, dict):
+            metric = str(metadata.get("hnsw:space", "l2")).lower()
+
         formatted = []
         for i in range(len(results["ids"][0])):
-            score = 1 - results["distances"][0][i]
+            distance = float(results["distances"][0][i])
+            if metric == "cosine":
+                score = 1.0 - distance
+            elif metric == "ip":
+                score = -distance
+            else:
+                score = 1.0 / (1.0 + distance)
             if score < min_score:
                 continue
 
@@ -109,10 +120,11 @@ class ChromaVectorStore:
             return None
 
         chunks = []
+        docs = results.get("documents")
         for i, id_ in enumerate(results["ids"]):
             text = ""
-            if results.get("documents") and results["documents"][i]:
-                text = results["documents"][i]
+            if docs and i < len(docs) and docs[i]:
+                text = docs[i]
             if not text:
                 text = results["metadatas"][i].get("text", "")
 

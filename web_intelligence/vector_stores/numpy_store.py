@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import json
 import logging
-import pickle
 from pathlib import Path
 from typing import List, Dict, Optional
 
@@ -24,29 +24,37 @@ class NumpyVectorStore:
         self._metadatas: list[Dict] = []
         self._documents: list[str] = []
 
-        if self.persist_path and self.persist_path.exists():
+        if self.persist_path and self._meta_path().exists() and self._vectors_path().exists():
             self._load()
             logger.info("Loaded %d chunks from %s", len(self._ids), self.persist_path)
         else:
             logger.info("NumpyVectorStore initialized (empty)")
 
+    def _meta_path(self) -> Path:
+        assert self.persist_path is not None
+        return self.persist_path.with_suffix(self.persist_path.suffix + ".json")
+
+    def _vectors_path(self) -> Path:
+        assert self.persist_path is not None
+        return self.persist_path.with_suffix(self.persist_path.suffix + ".npy")
+
     def _save(self) -> None:
         if self.persist_path is None:
             return
         self.persist_path.parent.mkdir(parents=True, exist_ok=True)
+        np.save(self._vectors_path(), self._vectors)
         data = {
-            "vectors": self._vectors,
             "ids": self._ids,
             "metadatas": self._metadatas,
             "documents": self._documents,
         }
-        with open(self.persist_path, "wb") as f:
-            pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(self._meta_path(), "w", encoding="utf-8") as f:
+            json.dump(data, f)
 
     def _load(self) -> None:
-        with open(self.persist_path, "rb") as f:
-            data = pickle.load(f)
-        self._vectors = data["vectors"]
+        self._vectors = np.load(self._vectors_path())
+        with open(self._meta_path(), "r", encoding="utf-8") as f:
+            data = json.load(f)
         self._ids = data["ids"]
         self._metadatas = data["metadatas"]
         self._documents = data.get("documents", [""] * len(self._ids))
@@ -58,11 +66,24 @@ class NumpyVectorStore:
         ids: List[str],
         documents: Optional[List[str]] = None,
     ) -> None:
+        if not vectors:
+            raise ValueError("vectors must not be empty")
+        if len(vectors) != len(metadatas) or len(vectors) != len(ids):
+            raise ValueError("vectors, metadatas, and ids must have matching lengths")
+        if documents is not None and len(documents) != len(vectors):
+            raise ValueError("documents length must match vectors length")
+
         new_vecs = np.array(vectors, dtype=np.float32)
+        if new_vecs.ndim != 2:
+            raise ValueError("vectors must be a 2D list")
 
         if self._vectors is None:
             self._vectors = new_vecs
         else:
+            if self._vectors.shape[1] != new_vecs.shape[1]:
+                raise ValueError(
+                    f"Dimension mismatch: expected {self._vectors.shape[1]}, got {new_vecs.shape[1]}"
+                )
             self._vectors = np.vstack([self._vectors, new_vecs])
 
         self._ids.extend(ids)

@@ -24,7 +24,7 @@ def _env(key: str, default: Any = None, cast: type = str) -> Any:
     val = os.environ.get(key, default)
     if val is None:
         return None
-    if cast == bool:
+    if cast is bool:
         return str(val).lower() in ("1", "true", "yes", "on")
     return cast(val)
 
@@ -73,7 +73,7 @@ class SearchConfig:
 
 @dataclass
 class ServerConfig:
-    host: str = _env("WI_SERVER_HOST", "0.0.0.0")
+    host: str = _env("WI_SERVER_HOST", "127.0.0.1")
     port: int = _env("WI_SERVER_PORT", 8000, int)
     reload: bool = _env("WI_SERVER_RELOAD", False, bool)
 
