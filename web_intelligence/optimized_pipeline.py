@@ -312,6 +312,36 @@ class FastPipeline:
 
         return results
 
+    def _filter_cached_urls(self, urls: List[str], skip_cached: bool) -> tuple[List[str], List[Dict]]:
+        if not (self.url_cache and skip_cached):
+            return list(urls), []
+
+        urls_to_process: List[str] = []
+        cached_results: List[Dict] = []
+
+        for url in urls:
+            if not self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
+                urls_to_process.append(url)
+                continue
+
+            cached_data = self.url_cache.get(url) or {}
+            doc_id = cached_data.get("data", {}).get("doc_id", "")
+            if doc_id and self.vector_store.get_document(doc_id) is not None:
+                cached_results.append({
+                    "success": True,
+                    "url": url,
+                    "cached": True,
+                    "title": cached_data.get("data", {}).get("title", "Cached"),
+                    "chunks_count": cached_data.get("data", {}).get("chunks", 0),
+                    "doc_id": doc_id,
+                    "indexed_at": cached_data.get("cached_at", ""),
+                })
+                self.stats_data["urls_cached"] += 1
+            else:
+                urls_to_process.append(url)
+
+        return urls_to_process, cached_results
+
     def index_batch(
         self,
         urls: List[str],
@@ -320,31 +350,7 @@ class FastPipeline:
     ) -> List[Dict]:
         import time
 
-        urls_to_process: List[str] = []
-        cached_results: List[Dict] = []
-
-        if self.url_cache and skip_cached:
-            for url in urls:
-                if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
-                    cached_data = self.url_cache.get(url)
-                    doc_id = cached_data.get("data", {}).get("doc_id", "")
-                    if doc_id and self.vector_store.get_document(doc_id) is not None:
-                        cached_results.append({
-                            "success": True,
-                            "url": url,
-                            "cached": True,
-                            "title": cached_data.get("data", {}).get("title", "Cached"),
-                            "chunks_count": cached_data.get("data", {}).get("chunks", 0),
-                            "doc_id": doc_id,
-                            "indexed_at": cached_data["cached_at"],
-                        })
-                        self.stats_data["urls_cached"] += 1
-                    else:
-                        urls_to_process.append(url)
-                else:
-                    urls_to_process.append(url)
-        else:
-            urls_to_process = list(urls)
+        urls_to_process, cached_results = self._filter_cached_urls(urls, skip_cached)
 
         if not urls_to_process:
             return cached_results
@@ -387,31 +393,7 @@ class FastPipeline:
         return cached_results + new_results
 
     async def index_batch_async(self, urls: List[str], skip_cached: bool = True) -> List[Dict]:
-        urls_to_process: List[str] = []
-        cached_results: List[Dict] = []
-
-        if self.url_cache and skip_cached:
-            for url in urls:
-                if self.url_cache.is_cached(url, ttl_hours=self.config.url_cache_ttl_hours):
-                    cached_data = self.url_cache.get(url)
-                    doc_id = cached_data.get("data", {}).get("doc_id", "")
-                    if doc_id and self.vector_store.get_document(doc_id) is not None:
-                        cached_results.append({
-                            "success": True,
-                            "url": url,
-                            "cached": True,
-                            "title": cached_data.get("data", {}).get("title", "Cached"),
-                            "chunks_count": cached_data.get("data", {}).get("chunks", 0),
-                            "doc_id": doc_id,
-                            "indexed_at": cached_data["cached_at"],
-                        })
-                        self.stats_data["urls_cached"] += 1
-                    else:
-                        urls_to_process.append(url)
-                else:
-                    urls_to_process.append(url)
-        else:
-            urls_to_process = list(urls)
+        urls_to_process, cached_results = self._filter_cached_urls(urls, skip_cached)
 
         if not urls_to_process:
             return cached_results

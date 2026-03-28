@@ -96,7 +96,7 @@ class ContentCache:
             json.dump(self.hashes, f, indent=2)
     
     def get_content_hash(self, text: str) -> str:
-        return hashlib.sha256(text.encode()).hexdigest()[:32]
+        return hashlib.sha256(text.encode()).hexdigest()
     
     def is_duplicate(self, text: str) -> bool:
         content_hash = self.get_content_hash(text)

@@ -142,10 +142,10 @@ def retrieve(req: RetrieveRequest):
 
 
 @app.post("/search-web")
-def search_web(req: SearchWebRequest):
+async def search_web(req: SearchWebRequest):
     pipeline = get_pipeline()
     try:
-        ctx = pipeline.search_web(
+        ctx = await pipeline.search_web_async(
             req.query,
             max_results=req.max_results,
             limit=req.limit,
